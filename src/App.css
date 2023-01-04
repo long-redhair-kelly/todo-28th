@@ -14,10 +14,10 @@
 .submitButton {
   padding: 8px 15px;
   cursor: pointer;
+  background-color: slategray;
 }
 
 .todoList li {
-  width: 10%;
   display: flex;
   align-items: center;
   margin-bottom: 10px;

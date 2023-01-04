@@ -83,7 +83,9 @@ function App() {
             onChange={(e) => handleChange(e)}
             className="inputText"
           />
-          <input type="submit" value="ADD" className="submitButton" />
+          <button type="submit" className="submitButton">
+            ADD
+          </button>
           <div className="remaining">未完了タスク： {todos.length}個</div>
         </form>
         {/* タスク設定が完了したら */}
