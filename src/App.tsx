@@ -7,7 +7,7 @@ function App() {
 
   type Todo = {
     inputValue: string;
-    id: number; //keyを指定するため
+    id: number; // keyを指定するため
     checked: boolean;
   };
 
@@ -24,7 +24,7 @@ function App() {
       return;
     }
 
-    //新しいTodo作成
+    // 新しいTodo作成
     const newTodo: Todo = {
       inputValue: inputText,
       id: todos.length,
@@ -36,7 +36,7 @@ function App() {
     setInputText(inputText);
   };
 
-  //todo編集
+  // todo編集
   const handleEdit = (id: number, inputValue: string) => {
     const deepCopy = todos.map((todo) => ({ ...todo }));
     console.log(deepCopy);
@@ -51,13 +51,13 @@ function App() {
     setTodos(newTodos);
   };
 
-  //完了未完了
+  // 完了未完了
   const handleChecked = (id: number, checked: boolean) => {
     const deepCopy = todos.map((todo) => ({ ...todo }));
 
     const newTodos = deepCopy.map((todo) => {
       if (todo.id === id) {
-        //反転
+        // toggle
         todo.checked = !checked;
       }
       return todo;
@@ -66,9 +66,9 @@ function App() {
     setTodos(newTodos);
   };
 
-  //削除
+  // 削除
   const handleDelete = (id: number) => {
-    //idが正しくないのは残す。正しいと消す。
+    // idが一致した場合のみ消す
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   };
