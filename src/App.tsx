@@ -32,7 +32,7 @@ function App() {
     };
 
     setTodos([newTodo, ...todos]);
-    console.log(inputText);
+    console.log("***inputText: ", inputText);
     setInputText(inputText);
   };
 
@@ -82,8 +82,13 @@ function App() {
             type="text"
             onChange={(e) => handleChange(e)}
             className="inputText"
+            placeholder="Todoを入力"
           />
-          <button type="submit" className="submitButton">
+          <button
+            type="submit"
+            data-testid="submitButton"
+            className="submitButton"
+          >
             ADD
           </button>
           <div className="remaining">未完了タスク： {todos.length}個</div>
@@ -91,7 +96,7 @@ function App() {
         {/* タスク設定が完了したら */}
         <ul className="todoList">
           {todos.map((todo) => (
-            <li key={todo.id}>
+            <li data-testid={"todoList_" + todo.id} key={todo.id}>
               <input
                 type="text"
                 value={todo.inputValue}
