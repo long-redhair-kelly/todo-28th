@@ -54,10 +54,9 @@ describe("App test Compornent", () => {
       render(<App />);
       const addButton = screen.getByRole("button");
       const todoText = screen.getByPlaceholderText("Todoを入力");
+      const inputTodo = "hogehoge";
 
-      screen.debug(addButton);
-
-      userEvent.type(todoText, "hogehoge");
+      userEvent.type(todoText, inputTodo);
       userEvent.click(addButton);
 
       const afterTodoList = screen.queryAllByRole("listitem");
