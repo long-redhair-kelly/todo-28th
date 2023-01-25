@@ -84,11 +84,7 @@ function App() {
             className="inputText"
             placeholder="Todoを入力"
           />
-          <button
-            type="submit"
-            data-testid="submitButton"
-            className="submitButton"
-          >
+          <button type="submit" className="submitButton">
             ADD
           </button>
           <div className="remaining">未完了タスク： {todos.length}個</div>
