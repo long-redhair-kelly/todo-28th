@@ -70,7 +70,7 @@ describe("App test Compornent", () => {
 
       userEvent.click(addButton);
 
-      const afterTodoList = screen.queryAllByTestId(/todoList_/);
+      const afterTodoList = screen.queryAllByRole("listitem");
 
       expect(afterTodoList).toBeNull;
     });
