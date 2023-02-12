@@ -32,14 +32,12 @@ function App() {
     };
 
     setTodos([newTodo, ...todos]);
-    console.log("***inputText: ", inputText);
     setInputText(inputText);
   };
 
   // todo編集
   const handleEdit = (id: number, inputValue: string) => {
     const deepCopy = todos.map((todo) => ({ ...todo }));
-    console.log(deepCopy);
 
     const newTodos = deepCopy.map((todo) => {
       if (todo.id === id) {
@@ -89,7 +87,7 @@ function App() {
           </button>
           <div className="remaining">未完了タスク： {todos.length}個</div>
         </form>
-        {/* タスク設定が完了したら */}
+        {/* タスクリスト */}
         <ul className="todoList">
           {todos.map((todo) => (
             <li data-testid={"todoList_" + todo.id} key={todo.id}>
