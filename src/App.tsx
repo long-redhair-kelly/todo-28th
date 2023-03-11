@@ -78,11 +78,16 @@ function App() {
         <form onSubmit={(e) => handleSubmit(e)}>
           <input
             type="text"
+            data-testid="inputTodo"
             onChange={(e) => handleChange(e)}
             className="inputText"
             placeholder="Todoを入力"
           />
-          <button type="submit" className="submitButton">
+          <button
+            type="submit"
+            className="submitButton"
+            data-testid="submitAdd"
+          >
             ADD
           </button>
           <div className="remaining">未完了タスク： {todos.length}個</div>
@@ -93,6 +98,7 @@ function App() {
             <li data-testid={"todoList_" + todo.id} key={todo.id}>
               <input
                 type="text"
+                data-testid={"todo_" + todo.id}
                 value={todo.inputValue}
                 onChange={(e) => handleEdit(todo.id, e.target.value)}
                 disabled={todo.checked}
