@@ -104,7 +104,7 @@ function App() {
                 checked={todo.checked}
                 onChange={() => handleChecked(todo.id, todo.checked)}
               />
-              <button onClick={() => handleDelete(todo.id)}>DEL</button>
+              <button onClick={() => handleDelete(todo.id)}>DELETE</button>
             </li>
           ))}
         </ul>
