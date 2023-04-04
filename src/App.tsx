@@ -17,22 +17,17 @@ function App() {
     setInputText(e.target.value);
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    if (!inputText) {
-      return;
-    }
-
-    // 新しいTodo作成
+    if (!inputText.trim()) return;
     const newTodo: Todo = {
       inputValue: inputText,
       id: todos.length,
       checked: false,
     };
 
-    setTodos([newTodo, ...todos]);
-    setInputText(inputText);
+    setTodos([...todos, newTodo]);
+    setInputText("");
   };
 
   // todo編集
@@ -75,18 +70,19 @@ function App() {
     <div className="App">
       <div>
         <h2>Todoリスト</h2>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             data-testid="inputTodo"
-            onChange={(e) => handleChange(e)}
+            value={inputText}
+            onChange={handleChange}
             className="inputText"
             placeholder="Todoを入力"
           />
           <button
             type="submit"
-            className="submitButton"
             data-testid="submitAdd"
+            className="submitButton"
           >
             ADD
           </button>
