@@ -25,4 +25,7 @@ jobs:
           # run キーワードは、ランナーでコマンドを実行するようにジョブに指示
       - run: npm install -g bats
       - run: bats -v
-      
+      - name: jest
+        run: |
+          yarn test:coverage
+        continue-on-error: true
