@@ -2,76 +2,106 @@
  * @jest-environment jsdom
  */
 
-import React, { useState as useStateMock } from "react";
-import { render, screen } from "@testing-library/react";
-import App from "../src/App";
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import userEvent from "@testing-library/user-event";
+import App from "../src/App";
 
-jest.mock("react", () => ({
-  ...jest.requireActual("react"),
-  useState: jest.fn(),
-}));
-
-describe("App test Compornent", () => {
-  const setState = jest.fn();
-
-  beforeEach(() => {
-    (useStateMock as jest.Mock).mockImplementation((init) => [init, setState]);
+describe("Todoリスト", () => {
+  it("toMatchSnapshot", () => {
+    const app = render(<App />);
+    expect(app).toMatchSnapshot();
   });
 
-  describe("初期表示", () => {
-    it("Todoリストタイトルが描画されていること", async () => {
-      render(<App />);
-      // タイトル
-      expect(screen.getByText(/Todoリスト/)).toBeTruthy();
-    });
+  it("空のタスクの場合、何も変わらない", async () => {
+    const todoText = "";
+    render(<App />);
 
-    it("入力テキストがtextタイプで描画されていること", async () => {
-      render(<App />);
-      // 入力テキスト
-      const todoText = screen.getByPlaceholderText("Todoを入力");
-      expect(todoText).toHaveAttribute("type", "text");
-    });
+    const inputTodo = screen.getByTestId("inputTodo");
+    const submitButton = screen.getByTestId("submitAdd");
 
-    it("ADDボタンが描画されていること", async () => {
-      render(<App />);
-      // ADDボタン
-      const addButton = screen.getByRole("button");
-      expect(addButton).toBeTruthy();
-    });
+    fireEvent.change(inputTodo, { target: { value: todoText } });
+    fireEvent.click(submitButton);
 
-    it("Todoリストが空になっていること", async () => {
-      render(<App />);
-      // Todoリスト
-      const todos = screen.queryAllByTestId(/todoList_/);
-      expect(todos).toBeNull;
-    });
+    const newTodo = await screen.queryByTestId("todo_0");
+    expect(newTodo).toBeNull();
   });
 
-  describe("リスト追加", () => {
-    it("空文字以外の場合、ToDoリストに追加した文字列が追加されていること ", async () => {
-      render(<App />);
-      const addButton = screen.getByRole("button");
-      const todoText = screen.getByPlaceholderText("Todoを入力");
-      const inputTodo = "hogehoge";
+  it("タスクを追加する", async () => {
+    const todoText = "新しいタスク";
+    render(<App />);
 
-      userEvent.type(todoText, inputTodo);
-      userEvent.click(addButton);
+    const inputTodo = screen.getByTestId("inputTodo");
+    const submitButton = screen.getByTestId("submitAdd");
 
-      const afterTodoList = screen.queryAllByRole("listitem");
-      expect(afterTodoList).not.toBeNull;
-    });
+    fireEvent.change(inputTodo, { target: { value: todoText } });
+    fireEvent.click(submitButton);
 
-    it("空文字の場合、ToDoリストに空文字が追加されていないこと ", async () => {
-      render(<App />);
-      const addButton = screen.getByRole("button");
+    const newTodo = await screen.findByTestId("todo_0");
+    expect(newTodo).toHaveValue(todoText);
+  });
 
-      userEvent.click(addButton);
+  it("タスクを編集する", async () => {
+    const todoText = "新しいタスク";
+    const editedTodoText = "編集後のタスク";
+    render(<App />);
 
-      const afterTodoList = screen.queryAllByRole("listitem");
+    const inputTodo = screen.getByTestId("inputTodo");
+    const submitButton = screen.getByTestId("submitAdd");
 
-      expect(afterTodoList).toBeNull;
-    });
+    fireEvent.change(inputTodo, { target: { value: todoText } });
+    fireEvent.click(submitButton);
+
+    const newTodo = await screen.findByTestId("todo_0");
+    expect(newTodo).toBeInTheDocument();
+
+    fireEvent.change(newTodo, { target: { value: editedTodoText } });
+
+    const editedTodo = await screen.findByDisplayValue(editedTodoText);
+    expect(editedTodo).toBeInTheDocument();
+  });
+
+  it("タスクの完了/未完了を切り替える", async () => {
+    const todoText = "新しいタスク";
+    render(<App />);
+
+    const inputTodo = screen.getByTestId("inputTodo");
+    const submitButton = screen.getByTestId("submitAdd");
+
+    fireEvent.change(inputTodo, { target: { value: todoText } });
+    fireEvent.click(submitButton);
+
+    const newTodo = await screen.findByTestId("todo_0");
+    expect(newTodo).toBeInTheDocument();
+
+    const checkbox = screen.getByRole("checkbox");
+
+    fireEvent.click(checkbox);
+
+    expect(checkbox).toBeChecked();
+
+    fireEvent.click(checkbox);
+
+    expect(checkbox).not.toBeChecked();
+  });
+
+  it("タスクを削除する", async () => {
+    const todoText = "新しいタスク";
+    render(<App />);
+
+    const inputTodo = screen.getByTestId("inputTodo");
+    const submitButton = screen.getByTestId("submitAdd");
+
+    fireEvent.change(inputTodo, { target: { value: todoText } });
+    fireEvent.click(submitButton);
+
+    const newTodo = await screen.findByTestId("todo_0");
+    expect(newTodo).toBeInTheDocument();
+
+    const deleteButton = screen.getByText("DEL");
+
+    fireEvent.click(deleteButton);
+
+    expect(newTodo).not.toBeInTheDocument();
   });
 });

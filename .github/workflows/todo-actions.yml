@@ -1,27 +1,12 @@
 # 【省略可能】GitHub リポジトリの [アクション] タブに表示されるワークフローの名前
-name: todo-actions
-
-# 【省略可能】ワークフローから生成されたワークフロー実行の名前
-run-name: ${{ github.actor }} is todo GitHub Actions
-
-# このワークフローのトリガーを指定
-on: [push]
-
-# ワークフローで実行されるすべてのジョブをグループ化
+name: "coverage"
+on:
+  pull_request:
+    branches:
+      - main
 jobs:
-  # check-bats-version という名前のジョブを定義します。 子キーは、ジョブのプロパティを定義
-  check-bats-version:
-    # Ubuntu Linux ランナーの最新バージョンで実行されるようにジョブを構成します。 これは、ジョブが GitHub によってホストされている新しい仮想マシンで実行されるということ
+  coverage:
     runs-on: ubuntu-latest
-
-    # check-bats-version ジョブで実行されるすべてのステップをグループ化
     steps:
-      # uses キーワードは、このステップが actions/checkout アクションの v3 を実行することを指定
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.4.0"
-
-          # run キーワードは、ランナーでコマンドを実行するようにジョブに指示
-      - run: npm install -g bats
-      - run: bats -v
+      - uses: ArtiomTr/jest-coverage-report-action@v2

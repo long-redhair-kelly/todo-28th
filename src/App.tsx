@@ -17,29 +17,22 @@ function App() {
     setInputText(e.target.value);
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    if (!inputText) {
-      return;
-    }
-
-    // 新しいTodo作成
+    if (!inputText.trim()) return;
     const newTodo: Todo = {
       inputValue: inputText,
       id: todos.length,
       checked: false,
     };
 
-    setTodos([newTodo, ...todos]);
-    console.log("***inputText: ", inputText);
-    setInputText(inputText);
+    setTodos([...todos, newTodo]);
+    setInputText("");
   };
 
   // todo編集
   const handleEdit = (id: number, inputValue: string) => {
     const deepCopy = todos.map((todo) => ({ ...todo }));
-    console.log(deepCopy);
 
     const newTodos = deepCopy.map((todo) => {
       if (todo.id === id) {
@@ -77,24 +70,31 @@ function App() {
     <div className="App">
       <div>
         <h2>Todoリスト</h2>
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            onChange={(e) => handleChange(e)}
+            data-testid="inputTodo"
+            value={inputText}
+            onChange={handleChange}
             className="inputText"
             placeholder="Todoを入力"
           />
-          <button type="submit" className="submitButton">
+          <button
+            type="submit"
+            data-testid="submitAdd"
+            className="submitButton"
+          >
             ADD
           </button>
           <div className="remaining">未完了タスク： {todos.length}個</div>
         </form>
-        {/* タスク設定が完了したら */}
+        {/* タスクリスト */}
         <ul className="todoList">
           {todos.map((todo) => (
             <li data-testid={"todoList_" + todo.id} key={todo.id}>
               <input
                 type="text"
+                data-testid={"todo_" + todo.id}
                 value={todo.inputValue}
                 onChange={(e) => handleEdit(todo.id, e.target.value)}
                 disabled={todo.checked}
